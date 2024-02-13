@@ -1,4 +1,5 @@
 import UserMainModel from "../../Models/user.model.js";
+import bcrypt from "bcryptjs";
 import catchAsync from "../../utils/catchAsync.js";
 
 const signUp = catchAsync(async (req, res) => {
@@ -15,12 +16,14 @@ const signUp = catchAsync(async (req, res) => {
                 .json({ error: "Username is already taked!!" });
         }
         //Hash Password Here
+        const salt = await bcrypt.genSalt(10);
+        const hashedPasword = await bcrypt.hash(password, salt);
         const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
         const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
         const newUser = new UserMainModel({
             fullName,
             username,
-            password,
+            password: hashedPasword,
             gender,
             profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
         });
