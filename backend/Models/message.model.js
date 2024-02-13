@@ -4,12 +4,12 @@ import mongoose from "mongoose";
 const messageSchema = new mongoose.Schema(
     {
         senderId: {
-            type: mongoose.Schema.Type.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "UserMainModel",
             require: true,
         },
         receiverId: {
-            type: mongoose.Schema.Type.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "UserMainModel",
             require: true,
         },
@@ -21,5 +21,5 @@ const messageSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-const MessageMainModel = mongoose.model.("Message", messageSchema);
+const MessageMainModel = mongoose.model("Message", messageSchema);
 export default MessageMainModel;
