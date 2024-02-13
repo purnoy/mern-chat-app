@@ -1,6 +1,7 @@
 import UserMainModel from "../../Models/user.model.js";
 import bcrypt from "bcryptjs";
 import catchAsync from "../../utils/catchAsync.js";
+import { generateTokenAndSetCookie } from "../../utils/generateToken.js";
 
 const signUp = catchAsync(async (req, res) => {
     try {
@@ -27,13 +28,18 @@ const signUp = catchAsync(async (req, res) => {
             gender,
             profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
         });
-        await newUser.save();
-        res.status(201).json({
-            _id: newUser._id,
-            fullName: newUser.fullName,
-            username: newUser.userame,
-            profilePic: newUser.profilePic,
-        });
+        if (newUser) {
+            generateTokenAndSetCookie(newUser._id, res);
+            await newUser.save();
+            res.status(201).json({
+                _id: newUser._id,
+                fullName: newUser.fullName,
+                username: newUser.userame,
+                profilePic: newUser.profilePic,
+            });
+        } else {
+            res.status(400).json({ error: "Invalid User data" });
+        }
     } catch (error) {
         console.log("Error in sign up controller", error.message);
         res.status(500).json({ error: "Internal server error" });
