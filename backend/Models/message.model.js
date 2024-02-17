@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema(
@@ -6,16 +5,16 @@ const messageSchema = new mongoose.Schema(
         senderId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "UserMainModel",
-            require: true,
+            required: true,
         },
         receiverId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "UserMainModel",
-            require: true,
+            required: true,
         },
         message: {
             type: String,
-            require: true,
+            required: true,
         },
     },
     { timestamps: true }
