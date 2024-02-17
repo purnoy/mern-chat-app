@@ -1,7 +1,7 @@
-import UserMainModel from "../../Models/user.model.js";
+import UserMainModel from "../Models/user.model.js";
 import bcrypt from "bcryptjs";
-import catchAsync from "../../utils/catchAsync.js";
-import { generateTokenAndSetCookie } from "../../utils/generateToken.js";
+import catchAsync from "../utils/catchAsync.js";
+import { generateTokenAndSetCookie } from "../utils/generateToken.js";
 
 const signUp = catchAsync(async (req, res) => {
     try {
