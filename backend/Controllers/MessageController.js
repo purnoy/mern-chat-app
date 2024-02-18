@@ -44,6 +44,21 @@ const sendMessage = catchAsync(async (req, res) => {
     }
 });
 
+const getMessage = catchAsync(async (req, res) => {
+    try {
+        const { id: userToChatId } = req.params;
+        const senderId = req.user._id;
+        let conversation = await ConversationMainModel.findOne({
+            participants: { $all: [senderId, userToChatId] },
+        }).populate("messages");
+        res.status(200).json(conversation.messages);
+    } catch (error) {
+        console.log("Error in getmessage controller ", error.message);
+        res.status(500).json({ error: "Internal server error with catch" });
+    }
+});
+
 export const MessageController = {
     sendMessage,
+    getMessage,
 };
