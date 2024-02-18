@@ -36,7 +36,7 @@ const sendMessage = catchAsync(async (req, res) => {
         if (newMessage) {
             conversation.messages.push(newMessage._id);
         }
-        await Promise.all(conversation.save(), newMessage.save());
+        await Promise.all([conversation.save(), newMessage.save()]);
         res.status(201).json(newMessage);
     } catch (error) {
         console.log("Message can not be sent", error.message);
@@ -50,8 +50,19 @@ const getMessage = catchAsync(async (req, res) => {
         const senderId = req.user._id;
         let conversation = await ConversationMainModel.findOne({
             participants: { $all: [senderId, userToChatId] },
-        }).populate("messages");
-        res.status(200).json(conversation.messages);
+        }).select("messages");
+        const messages = await MessageMainModel.find({
+            _id: { $in: conversation.messages },
+        });
+
+        // Now you have the conversation and its messages, you can format the response as needed
+        const formattedConversation = {
+            _id: conversation._id,
+            participants: conversation.participants,
+            messages: messages,
+        };
+
+        res.status(200).json(formattedConversation);
     } catch (error) {
         console.log("Error in getmessage controller ", error.message);
         res.status(500).json({ error: "Internal server error with catch" });
