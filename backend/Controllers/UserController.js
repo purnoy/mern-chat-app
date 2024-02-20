@@ -6,7 +6,7 @@ const getUserForTheSideBar = catchAsync(async (req, res) => {
         const loggedInUserId = req.user._id;
         const filterUsers = await UserMainModel.find({
             _id: { $ne: loggedInUserId },
-        });
+        }).select("-password");
         res.status(200).json(filterUsers);
     } catch (error) {
         console.log("Error in get user in the sidebar ", error.message);
